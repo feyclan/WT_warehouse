@@ -1,0 +1,17 @@
+{
+	"name": "BackendDB",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"description": "SQL server for the website",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=\"localhost, 1443\";initial catalog=wtacademy;user id=Nours",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIxYjA3MDJmZC0wNjhhLTRiNzEtOTMyNC1lNmU2M2Y2OTgzNDUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "LiveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
