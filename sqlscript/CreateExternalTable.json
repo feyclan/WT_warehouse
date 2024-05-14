@@ -1,0 +1,17 @@
+{
+	"name": "CreateExternalTable",
+	"properties": {
+		"content": {
+			"query": "-- Stap 1: Maak externe data bron\nCREATE EXTERNAL DATA SOURCE MyDataLakeDataSource\nWITH (\n    TYPE = HADOOP,\n    LOCATION = 'abfss://storagelaas.dfs.core.windows.net/boeken/books_data.csv',\n    CREDENTIAL = MyDataLakeCredential\n);\n\n-- Stap 2: Maak externe tabel\nCREATE EXTERNAL TABLE dbo.ExternalBooksTable\n(\n    Title NVARCHAR(max),\n    Description NVARCHAR(max),\n    Authors NVARCHAR(max),\n    Image NVARCHAR(max),\n    PreviewLink NVARCHAR(max),\n    Publisher NVARCHAR(max),\n    PublishedDate NVARCHAR(max),\n    InfoLink NVARCHAR(max),\n    Categories NVARCHAR(max),\n    RatingsCount INT\n)\nWITH\n(\n    LOCATION = 'https://storagelaas.dfs.core.windows.net/boeken/books_data.csv',\n    DATA_SOURCE = MyDataLakeDataSource,\n    FILE_FORMAT = CSVFileFormatName\n);",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DB_Books",
+				"poolName": "DB_Books"
+			},
+			"resultLimit": -1
+		},
+		"type": "SqlQuery"
+	}
+}
