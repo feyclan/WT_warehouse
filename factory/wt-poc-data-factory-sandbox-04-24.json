@@ -1,9 +1,0 @@
-{
-	"name": "wt-poc-data-factory-sandbox-04-24",
-	"location": "westeurope",
-	"identity": {
-		"type": "SystemAssigned",
-		"principalId": "1bb11862-cc6b-418b-aec6-d35c2623d4f0",
-		"tenantId": "9bb81715-1b14-4c9a-8481-96d67f434084"
-	}
-}
