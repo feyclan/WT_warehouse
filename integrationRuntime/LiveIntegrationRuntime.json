@@ -1,0 +1,6 @@
+{
+	"name": "LiveIntegrationRuntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
