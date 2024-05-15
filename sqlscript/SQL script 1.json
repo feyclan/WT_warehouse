@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "CREATE EXTERNAL DATA SOURCE books_table\nWITH ( \n    LOCATION = 'https://storagelaas.blob.core.windows.net/boeken');\n\n-- CREATE EXTERNAL FILE FORMAT CSVFormat\n-- WITH (\n--     FORMAT_TYPE = CSV\n-- );\nCREATE EXTERNAL FILE FORMAT CSVFormat\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n      FIELD_TERMINATOR = ',',\n      STRING_DELIMITER = '\"',\n      FIRST_ROW = 2,\n      USE_TYPE_DEFAULT = FALSE,\n      ENCODING = 'UTF8' )\n);\n\nCREATE EXTERNAL TABLE dbo.ExternalBooksTable\n(\n    Title NVARCHAR(max),\n    Description NVARCHAR(max),\n    Authors NVARCHAR(max),\n    Image NVARCHAR(max),\n    PreviewLink NVARCHAR(max),\n    Publisher NVARCHAR(max),\n    PublishedDate NVARCHAR(max),\n    InfoLink NVARCHAR(max),\n    Categories NVARCHAR(max),\n    RatingsCount INT\n)\nWITH\n(\n    LOCATION = '/boeken/books_data.csv',\n    DATA_SOURCE = books,\n    FILE_FORMAT = CSVFormat\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "Backend-DB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
