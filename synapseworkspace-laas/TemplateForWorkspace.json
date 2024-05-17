@@ -114,6 +114,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- Verwijder de bestaande externe gegevensbron als deze al bestaat\nIF EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'books')\nBEGIN\n    DROP EXTERNAL DATA SOURCE books;\nEND\nIF EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'CSVFormat')\nBEGIN\n    DROP EXTERNAL FILE FORMAT CSVFormat;\nEND\nIF OBJECT_ID('dbo.InternalBooksTable', 'U') IS NOT NULL\nBEGIN\n    DROP TABLE dbo.InternalBooksTable;\nEND\n\n\n-- Stap 1: Maak een externe gegevensbron voor Azure Data Lake Storage Gen2\nCREATE EXTERNAL DATA SOURCE books\nWITH ( \n    LOCATION = 'https://storagelaas.dfs.core.windows.net/boeken'\n);\n\n-- Stap 2: Maak een externe bestandsindeling voor het CSV-bestand\nCREATE EXTERNAL FILE FORMAT CSVFormat\nWITH (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n      FIELD_TERMINATOR = ',',\n      STRING_DELIMITER = '\"',\n      FIRST_ROW = 2,\n      USE_TYPE_DEFAULT = FALSE,\n      ENCODING = 'UTF8'\n    )\n);\n\n-- Stap 3: Maak een interne doel-SQL-tabel waarin de gegevens worden ingevoegd\nCREATE TABLE dbo.InternalBooksTable\n(\n    Title NVARCHAR(4000),\n    Description NVARCHAR(4000),\n    Authors NVARCHAR(4000),\n    Image NVARCHAR(4000),\n    PreviewLink NVARCHAR(4000),\n    Publisher NVARCHAR(4000),\n    PublishedDate NVARCHAR(100),\n    InfoLink NVARCHAR(4000),\n    Categories NVARCHAR(4000),\n    RatingsCount INT\n)\nWITH\n(\n    DISTRIBUTION = ROUND_ROBIN,\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n-- Stap 4: Voer de COPY INTO-opdracht uit om gegevens van de externe opslag naar de interne tabel te kopiëren\nCOPY INTO dbo.InternalBooksTable\n(\n    Title,\n    Description,\n    Authors,\n    Image,\n    PreviewLink,\n    Publisher,\n    PublishedDate,\n    InfoLink,\n    Categories,\n    RatingsCount\n)\nFROM 'https://storagelaas.dfs.core.windows.net/boeken/books_data.csv'\nWITH  \n(\n   FILE_TYPE = 'CSV',\n   FIELDTERMINATOR = ',',\n   ROWTERMINATOR = '0x0A',\n   FIELDQUOTE = '\"',\n   ENCODING = 'UTF8',\n   FIRSTROW = 2,\n   MAXERRORS = 10,\n   ERRORFILE = 'https://storagelaas.dfs.core.windows.net/boeken/errorsfolder'\n);\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "DB_Books",
+						"poolName": "DB_Books"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/DB_Books')]",
 			"type": "Microsoft.Synapse/workspaces/sqlPools",
 			"apiVersion": "2019-06-01-preview",
