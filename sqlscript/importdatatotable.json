@@ -1,0 +1,17 @@
+{
+	"name": "importdatatotable",
+	"properties": {
+		"content": {
+			"query": "-- Stap 4: Voer de COPY INTO-opdracht uit om gegevens van de externe opslag naar de interne tabel te kopiëren\nCOPY INTO dbo.InternalBooksTable\n(\n    Title,\n    Description,\n    Authors,\n    Image,\n    PreviewLink,\n    Publisher,\n    PublishedDate,\n    InfoLink,\n    Categories,\n    RatingsCount\n)\nFROM 'https://storagelaas.dfs.core.windows.net/boeken/books_data.csv'\nWITH  \n(\n   FILE_TYPE = 'CSV',\n   FIELDTERMINATOR = ',',\n   ROWTERMINATOR = '0x0A',\n   FIELDQUOTE = '\"',\n   ENCODING = 'UTF8',\n   FIRSTROW = 2,\n   MAXERRORS = 10\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DB_Books",
+				"poolName": "DB_Books"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
